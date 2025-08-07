@@ -1,93 +1,93 @@
-1 global _start
-2
-3 section .data
-4 msg1 db "Enter 1st Value:", 10
-5 msg1len equ $ - msg1
-6
-7 msg2 db "Enter 2nd Value:", 10
-8 msg2len equ $ - msg2
-9
-10 msg3 db "The addition is: "
-11 msg3len equ $ - msg3
-12
-13 newline db 10
-14
-15 section .bss
-16 val1 resb 2 ; will store input + newline
-17 val2 resb 2
-18 result resb 2
-19
-20 section .text
-21 _start:
-22 ; Prompt for first value
-23 mov eax, 4
-24 mov ebx, 1
-25 mov ecx, msg1
-26 mov edx, msg1len
-27 int 0x80
-28
-29 ; Read first value (2 bytes: digit + newline)
-30 mov eax, 3
-31 mov ebx, 0
-32 mov ecx, val1
-33 mov edx, 2
-34 int 0x80
-35
-36 ; Prompt for second value
-37 mov eax, 4
-38 mov ebx, 1
-39 mov ecx, msg2
-40 mov edx, msg2len
-41 int 0x80
-42
-43 ; Read second value (2 bytes: digit + newline)
-44 mov eax, 3
-45 mov ebx, 0
-46 mov ecx, val2
-47 mov edx, 2
-48 int 0x80
-49
-50 ; Convert val1[0] and val2[0] from ASCII to integer
-51 mov al, [val1]
-52 sub al, '0' ; AL = val1 numeric
-53 mov bl, [val2]
-54 sub bl, '0' ; BL = val2 numeric
-55
-56 ; Add values
-57 add al, bl ; AL = val1 + val2
-58
-59 ; Convert result to ASCII (max 18)
-60 mov ah, 0
-61 mov bl, 10
-62 div bl ; AL = quotient (tens), AH = remainder (units)
-63
-64 add al, '0'
-65 mov [result], al
-66
-67 add ah, '0'
-68 mov [result+1], ah
-69
-70 ; Print result message
-71 mov eax, 4
-72 mov ebx, 1
-73 mov ecx, msg3
+global _start
 
-74 mov edx, msg3len
-75 int 0x80
-76
-77 ; Print result digits
-78 mov eax, 4
-79 mov ebx, 1
-80 mov ecx, result
-81 mov edx, 2
-82 int 0x80
-83
-84 ; Print newline
-85 mov eax, 4
-86 mov ebx, 1
-87 mov ecx, newline
-88 mov edx, 1
-89 int 0x80
+ section .data
+ msg1 db "Enter 1st Value:", 10
+ msg1len equ $ - msg1
+
+ msg2 db "Enter 2nd Value:", 10
+msg2len equ $ - msg2
+
+ msg3 db "The addition is: "
+ msg3len equ $ - msg3
+
+ newline db 10
+
+ section .bss
+ val1 resb 2 ; will store input + newline
+val2 resb 2
+ result resb 2
+
+ section .text
+_start:
+ ; Prompt for first value
+ mov eax, 4
+ mov ebx, 1
+ mov ecx, msg1
+ mov edx, msg1len
+ int 0x80
+
+ ; Read first value (2 bytes: digit + newline)
+ mov eax, 3
+ mov ebx, 0
+ mov ecx, val1
+mov edx, 2
+ int 0x80
+
+ ; Prompt for second value
+ mov eax, 4
+ mov ebx, 1
+ mov ecx, msg2
+ mov edx, msg2len
+ int 0x80
+
+ ; Read second value (2 bytes: digit + newline)
+ mov eax, 3
+ mov ebx, 0
+ mov ecx, val2
+ mov edx, 2
+ int 0x80
+
+ ; Convert val1[0] and val2[0] from ASCII to integer
+ mov al, [val1]
+ sub al, '0' ; AL = val1 numeric
+ mov bl, [val2]
+ sub bl, '0' ; BL = val2 numeric
+
+ ; Add values
+ add al, bl ; AL = val1 + val2
+
+ ; Convert result to ASCII (max 18)
+ mov ah, 0
+ mov bl, 10
+ div bl ; AL = quotient (tens), AH = remainder (units)
+
+ add al, '0'
+ mov [result], al
+
+ add ah, '0'
+ mov [result+1], ah
+
+ ; Print result message
+ mov eax, 4
+ mov ebx, 1
+ mov ecx, msg3
+
+ mov edx, msg3len
+ int 0x80
+
+ ; Print result digits
+ mov eax, 4
+ mov ebx, 1
+ mov ecx, result
+ mov edx, 2
+ int 0x80
+
+ ; Print newline
+ mov eax, 4
+ mov ebx, 1
+ mov ecx, newline
+ mov edx, 1
+ int 0x80
 90
 91 ; Exit
 92 mov eax, 1
