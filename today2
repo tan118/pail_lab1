@@ -1,0 +1,46 @@
+section .text
+global _start
+
+_start:
+
+    mov eax, x        ; EAX points to array
+    mov ebx, 0        ; EBX = sum
+    mov ecx, 5        ; Count = 5 elements
+
+top:
+    add bl, [eax]     ; Add byte to BL (sum)
+    inc eax           ; Move to next byte
+    loop top          ; Repeat 5 times
+
+    ; BL now has sum (12 in this case)
+
+    mov al, bl        ; Move sum to AL for AAM
+    aam               ; AH = sum / 10, AL = sum % 10
+
+    add ax, 0x3030    ; Convert AH and AL to ASCII digits
+
+    mov [sum], ah     ; Store tens digit ASCII
+    mov [sum+1], al   ; Store ones digit ASCII
+
+    ; Display result
+    mov edx, 2        ; Length = 2 characters
+    mov ecx, sum      ; Message to write
+    mov ebx, 1        ; File descriptor = stdout
+    mov eax, 4        ; sys_write
+    int 0x80          ; Call kernel
+
+    ; Exit
+    mov eax, 1        ; sys_exit
+    int 0x80
+
+section .data
+global x
+x:
+    db 3
+    db 4
+    db 1
+    db 2
+    db 2             ; 3 + 4 + 1 + 2 + 2 = **12**
+
+sum:
+    db 0, 0          ; Placeholder for two ASCII digits
