@@ -1,8 +1,8 @@
 section .data
-    name1 db "Tanishkk", 10
+    name1 db "Tanishka", 10
     len1  equ $ - name1 
             
-    name2  db "Pachpute", 10        
+    name2  db "Mhetre", 10        
     len2   equ $ - name2    
 
 section .text
